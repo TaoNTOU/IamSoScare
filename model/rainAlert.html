@@ -1,0 +1,205 @@
+<section class="rain-panel" aria-labelledby="rain-title">
+  <header class="rain-header">
+    <div>
+      <h2 id="rain-title">降雨警戒圖</h2>
+      <p>基隆市一小時與三小時雨量監測</p>
+    </div>
+    <button id="rain-refresh" type="button">更新圖片</button>
+  </header>
+
+  <p id="rain-status" role="status"></p>
+
+  <div class="rain-grid">
+    <figure>
+      <figcaption>一小時雨量</figcaption>
+      <button class="rain-image-button" type="button"
+              aria-label="放大一小時雨量圖">
+        <img data-file="基隆市一小時雨量.png"
+             alt="基隆市一小時雨量警戒圖">
+      </button>
+      <p class="rain-error" hidden>圖片暫時無法載入，請稍後更新。</p>
+    </figure>
+
+    <figure>
+      <figcaption>三小時雨量</figcaption>
+      <button class="rain-image-button" type="button"
+              aria-label="放大三小時雨量圖">
+        <img data-file="基隆市三小時雨量.png"
+             alt="基隆市三小時雨量警戒圖">
+      </button>
+      <p class="rain-error" hidden>圖片暫時無法載入，請稍後更新。</p>
+    </figure>
+  </div>
+
+  <p class="rain-note">
+    每 10 分鐘重新載入圖片；觀測時間及警戒線請以圖內標示為準。
+  </p>
+</section>
+
+<dialog id="rain-dialog">
+  <button id="rain-close" type="button">關閉 ✕</button>
+  <img id="rain-large" alt="">
+</dialog>
+
+<style>
+  .rain-panel {
+    padding: 24px;
+    border: 1px solid #dce5ec;
+    border-radius: 16px;
+    background: #fff;
+    color: #203548;
+    font-family: system-ui, sans-serif;
+  }
+
+  .rain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .rain-header h2 { margin: 0 0 6px; }
+  .rain-header p,
+  .rain-note,
+  #rain-status { color: #617487; font-size: 14px; }
+
+  .rain-header p { margin: 0; }
+
+  #rain-refresh,
+  #rain-close {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: #126b82;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .rain-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .rain-grid figure {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid #dce5ec;
+    border-radius: 12px;
+  }
+
+  .rain-grid figcaption {
+    padding: 12px 16px;
+    background: #eef5f8;
+    font-weight: 700;
+  }
+
+  .rain-image-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: #fff;
+    cursor: zoom-in;
+  }
+
+  .rain-image-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .rain-error { padding: 12px 16px; color: #b34232; }
+
+  #rain-dialog {
+    width: min(1400px, 94vw);
+    max-width: 94vw;
+    max-height: 92vh;
+    box-sizing: border-box;
+    padding: 16px;
+    border: 0;
+    border-radius: 12px;
+  }
+
+  #rain-dialog::backdrop { background: rgb(0 0 0 / 75%); }
+  #rain-close { display: block; margin: 0 0 12px auto; }
+  #rain-large { display: block; width: 100%; height: auto; }
+
+  @media (max-width: 800px) {
+    .rain-grid { grid-template-columns: 1fr; }
+    .rain-panel { padding: 16px; }
+  }
+</style>
+
+<script>
+(() => {
+  // GitHub Pages 專案根目錄，MODEL 頁面放在子資料夾也適用。
+  const basePath = "/IamSoScare/database/fig/";
+  const images = [...document.querySelectorAll(".rain-grid img")];
+  const status = document.getElementById("rain-status");
+  const dialog = document.getElementById("rain-dialog");
+  const largeImage = document.getElementById("rain-large");
+  let generation = 0;
+
+  function refreshImages() {
+    const current = ++generation;
+    const version = Date.now();
+    let finished = 0;
+    let failed = 0;
+
+    status.textContent = "正在載入圖片…";
+
+    images.forEach(img => {
+      const error = img.closest("figure").querySelector(".rain-error");
+      error.hidden = true;
+
+      function finish(ok) {
+        if (current !== generation) return;
+        error.hidden = ok;
+        img.hidden = !ok;
+        finished++;
+        if (!ok) failed++;
+
+        if (finished === images.length) {
+          const time = new Date().toLocaleString("zh-TW", {
+            timeZone: "Asia/Taipei",
+            hour12: false
+          });
+          status.textContent = failed
+            ? `有 ${failed} 張圖片載入失敗，請點選更新圖片重試。`
+            : `圖片載入時間：${time}（臺灣時間）`;
+        }
+      }
+
+      img.onload = () => finish(true);
+      img.onerror = () => finish(false);
+      img.src = basePath + encodeURIComponent(img.dataset.file)
+        + "?v=" + version;
+    });
+  }
+
+  document.getElementById("rain-refresh")
+    .addEventListener("click", refreshImages);
+
+  images.forEach(img => {
+    img.parentElement.addEventListener("click", () => {
+      if (img.hidden || !img.complete || !img.naturalWidth) return;
+      largeImage.src = img.src;
+      largeImage.alt = img.alt;
+      dialog.showModal();
+    });
+  });
+
+  document.getElementById("rain-close")
+    .addEventListener("click", () => dialog.close());
+
+  dialog.addEventListener("click", event => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  refreshImages();
+  setInterval(refreshImages, 10 * 60 * 1000);
+})();
+</script>
