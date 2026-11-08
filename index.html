@@ -73,14 +73,27 @@ h3{font-size:1rem;margin:0 0 8px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .tile{border:1px solid var(--line);padding:20px;border-radius:10px}
 .tile p{font-size:.9rem;margin:0;color:var(--muted)}
-.tile-link{display:block;text-decoration:none}
-.tile-link:hover{border-color:var(--teal);background:#f4f9f9}
-.tile-link h3{color:var(--teal)}
-.empty{background:#f6f9fa;border:1px dashed #beced5;border-radius:10px;padding:28px 22px;margin:22px 0}
-.empty strong{display:block;margin-bottom:8px}
-.empty p{margin:0;color:var(--muted);font-size:.9rem}
-.entry-link{display:inline-block;margin-top:16px;padding:11px 18px;border-radius:8px;background:var(--teal);color:white;text-decoration:none;font-weight:700}
-.entry-link:hover{background:#0d565a}
+
+/* 直接顯示圖片的樣式容器 */
+.image-container {
+  margin: 22px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  background: #f8fafb;
+  text-align: center;
+}
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+.image-caption {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
 
 /* 表格樣式 */
 .table-wrap{overflow-x:auto}
@@ -117,17 +130,16 @@ footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px soli
 <!-- 【頂部標題列】 -->
 <header class="top">
   <div class="top-inner">
-    <div class="brand">災防資料庫</div> <!-- 修改這裡的網站大標題 -->
-    <div class="eyebrow" lang="en">Disaster Preparedness Database</div> <!-- 修改英文副標題 -->
+    <div class="brand">災防資料庫</div>
+    <div class="eyebrow" lang="en">Disaster Preparedness Database</div>
   </div>
 </header>
 
 <main>
-  <!-- 【首頁歡迎標語區】 -->
   <div class="intro">
-    <div class="eyebrow">監測資訊・演習規劃・知識整理</div> <!-- 小標題 -->
-    <h1>讓資訊成為應變的準備。</h1> <!-- 主標題 -->
-    <p>彙整降雨警戒資訊與 HSEEP 演習規劃資料，提供日常查閱、情境設計與防災工作參考。</p> <!-- 介紹文字 -->
+    <div class="eyebrow">監測資訊・演習規劃・知識整理</div>
+    <h1>讓資訊成為應變的準備。</h1>
+    <p>彙整降雨警戒資訊與 HSEEP 演習規劃資料，提供日常查閱、情境設計與防災工作參考。</p>
   </div>
 
   <div class="shell">
@@ -137,11 +149,8 @@ footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px soli
         <details open>
           <summary>資料分類</summary>
           <div class="nav-items">
-            <!-- 按鈕 1：降雨警戒 -->
             <button type="button" class="nav-button active" data-view="rain" aria-controls="rain" aria-current="page">降雨警戒</button>
-            <!-- 按鈕 2：HSEEP 演習 -->
             <button type="button" class="nav-button" data-view="hseep" aria-controls="hseep">HSEEP 演習</button>
-            <!-- 按鈕 3：聯絡資訊 -->
             <button type="button" class="nav-button" data-view="contact" aria-controls="contact">聯絡資訊</button>
           </div>
         </details>
@@ -153,34 +162,29 @@ footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px soli
     </aside>
 
     <div id="content" tabindex="-1">
-      <!-- 【分頁 1：降雨警戒內容】 -->
+      <!-- 【分頁 1：降雨警戒內容（直接內嵌圖片）】 -->
       <section id="rain" class="card view" aria-labelledby="rain-title">
         <div class="section-head">
           <h2 id="rain-title">降雨警戒</h2>
-          <span class="badge ready">雨量圖已提供</span>
+          <span class="badge ready">即時圖資已顯示</span>
         </div>
 
         <p class="lead">
-          提供基隆市一小時與三小時雨量圖；行政區警戒總覽將依建置進度加入。
+          以下直接顯示基隆市一小時與三小時雨量監測圖，無需另外點擊。
         </p>
 
-        <div class="grid">
-          <!-- 連結方塊：導向雨量圖頁面 -->
-          <a class="tile tile-link" href="./model/rainAlert.html">
-            <h3>雨量監測與警戒圖 →</h3>
-            <p>查看一小時與三小時雨量圖，點擊圖片可放大檢視。</p>
-          </a>
+        <!-- 【直接嵌入圖片的區域】 -->
+        <div class="image-container">
+          <!-- 請將 src="您的圖片路徑.jpg" 換成您實際的圖片檔案名稱或網址 -->
+          <img src="./model/your-rain-image.jpg" alt="基隆市雨量監測與警戒圖">
+          <div class="image-caption">觀測時間與警戒線以圖內標示為準</div>
+        </div>
 
+        <div class="grid">
           <article class="tile">
             <h3>行政區警戒總覽</h3>
             <p>規劃中：依測站位置與行政區整理降雨資訊，供區域查閱。</p>
           </article>
-        </div>
-
-        <div class="empty">
-          <strong>查看雨量警戒圖片</strong>
-          <p>進入監測頁查看最新上傳圖資，觀測時間與警戒線以圖內標示為準。</p>
-          <a class="entry-link" href="./model/rainAlert.html">開啟降雨警戒圖 →</a>
         </div>
 
         <!-- 工作通報門檻表格 -->
@@ -230,18 +234,6 @@ footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px soli
             <h3>情境設定</h3>
             <p>災害背景、時間軸、衝擊條件與應變限制。</p>
           </article>
-          <article class="tile">
-            <h3>MSEL 主要事件清單</h3>
-            <p>事件時間、情境注入、參與單位與預期應變作為。</p>
-          </article>
-          <article class="tile">
-            <h3>檢討與改善</h3>
-            <p>整理演習觀察、待改善事項與後續追蹤方向。</p>
-          </article>
-        </div>
-        <div class="empty">
-          <strong>待提供演習模板</strong>
-          <p>模板與案例完成整理後，將於本頁提供檢視。</p>
         </div>
       </section>
 
@@ -254,26 +246,16 @@ footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px soli
         <p class="lead">
           如有資料內容、演習模板或網站使用上的建議，可透過後續公布的聯絡方式提出。
         </p>
-        <div class="empty">
-          <strong>聯絡信箱待公布</strong>
-          <p>確認對外聯絡信箱後，將於此處提供電子郵件連結。</p>
-        </div>
-        <h3>關於資料庫</h3>
-        <p class="muted">
-          本網站持續整理防災監測與演習規劃相關資料。
-        </p>
       </section>
     </div>
   </div>
 </main>
 
-<!-- 【頁尾資訊】 -->
 <footer>
   <span>災防資料庫</span>
   <span>降雨監測與演習規劃資料整理</span>
 </footer>
 
-<!-- 【系統互動 JavaScript 程式碼（負責點擊選單切換分頁）】 -->
 <script>
 (() => {
   const buttons = [...document.querySelectorAll('[data-view]')];
