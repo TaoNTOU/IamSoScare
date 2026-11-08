@@ -2,290 +2,49 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow, noarchive">
-<meta name="referrer" content="strict-origin-when-cross-origin">
-
-<!-- 【修改這裡】網頁瀏覽器分頁標題 -->
-<title>災防資料庫 | Disaster Preparedness Database</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>災防資料庫</title>
 <style>
-/* ==========================================
-   【樣式設定區】顏色、字型與整體外觀
-   ========================================== */
-:root{
-  --bg:#f2f5f7;       /* 網頁背景色 */
-  --ink:#20313d;      /* 文字顏色 */
-  --muted:#607480;    /* 次要文字顏色（灰色） */
-  --line:#dce5e9;     /* 框線與分隔線顏色 */
-  --teal:#116b70;     /* 主題綠色 */
-  --navy:#153945;     /* 頂部深藍色 */
-  font-family:"Segoe UI","Microsoft JhengHei",system-ui,sans-serif;
-  color:var(--ink);
-  background:var(--bg);
-}
+:root{font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#20313d;background:#f2f5f7}
 *{box-sizing:border-box}
 body{margin:0}
-a{color:var(--teal)}
-button{font:inherit}
-a,button,summary{touch-action:manipulation}
+header{background:#153945;color:white;padding:22px}
+main,footer{max-width:1000px;margin:auto;padding:28px 20px}
+h1{font-size:clamp(1.8rem,5vw,2.6rem)}
+p{line-height:1.8;color:#607480}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card{display:block;padding:26px;border:1px solid #dce5e9;border-radius:14px;background:white;text-decoration:none;color:inherit}
+a.card:hover{border-color:#116b70;background:#f3fafa}
+h2{margin:0 0 12px;font-size:1.3rem}
+.card p{margin:0 0 18px}
+.tag{font-size:.85rem;color:#116b70;font-weight:700}
+footer{font-size:.8rem;color:#607480}
 :focus-visible{outline:3px solid #d28a26;outline-offset:4px}
-.skip{position:absolute;left:12px;top:-70px;background:white;padding:12px;z-index:10}
-.skip:focus{top:12px}
-
-/* 頂部導覽列樣式 */
-.top{background:var(--navy);color:white}
-.top-inner{max-width:1160px;margin:auto;padding:20px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
-.brand{font-size:1.15rem;font-weight:800;letter-spacing:.1em}
-.eyebrow{font-size:.73rem;letter-spacing:.14em;text-transform:uppercase}
-.top .eyebrow{color:#b7d5d8}
-
-/* 主內容區塊樣式 */
-main{max-width:1160px;margin:auto;padding:42px 24px 24px}
-.intro{margin-bottom:30px;max-width:760px}
-.intro .eyebrow{color:var(--teal);font-weight:800}
-h1{font-size:clamp(2rem,5vw,3.2rem);margin:10px 0 14px;line-height:1.2}
-p{line-height:1.85}
-.intro p,.muted{color:var(--muted)}
-
-/* 側邊欄與主卡片網格佈局 */
-.shell{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;align-items:start}
-.sidebar,.card{background:white;border:1px solid var(--line);border-radius:14px}
-.sidebar{padding:16px;position:sticky;top:20px}
-.sidebar summary{font-weight:800;padding:8px;cursor:pointer}
-.nav-items{display:grid;gap:6px;margin-top:10px}
-
-/* 側邊欄按鈕樣式 */
-.nav-button{border:0;background:transparent;color:var(--muted);text-align:left;padding:13px 12px;border-radius:8px;cursor:pointer;font-weight:700}
-.nav-button:hover{background:#edf5f5}
-.nav-button.active{background:#e5f1f0;color:#135f63}
-.sidebar-note{border-top:1px solid var(--line);padding:14px 8px 0;margin:18px 0 0;font-size:.8rem;color:var(--muted);line-height:1.8}
-
-/* 內容卡片樣式 */
-.card{padding:28px}
-.view[hidden]{display:none}
-.section-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-h2{margin:0;font-size:1.5rem}
-h3{font-size:1rem;margin:0 0 8px}
-.badge{background:#eef2f4;color:#596c77;padding:6px 10px;border-radius:20px;font-size:.76rem;font-weight:700}
-.badge.ready{background:#e5f1f0;color:#135f63}
-.lead{color:var(--muted);margin:14px 0 22px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.tile{border:1px solid var(--line);padding:20px;border-radius:10px}
-.tile p{font-size:.9rem;margin:0;color:var(--muted)}
-
-/* 直接顯示圖片的樣式容器 */
-.image-container {
-  margin: 22px 0;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 16px;
-  background: #f8fafb;
-  text-align: center;
-}
-.image-container img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-}
-.image-caption {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-/* 表格樣式 */
-.table-wrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:18px}
-caption{text-align:left;font-weight:800;margin-bottom:10px}
-th,td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--line);line-height:1.6}
-th{background:#f5f8f9}
-.notice{font-size:.82rem;color:var(--muted);border-left:3px solid #b6cbd0;padding-left:14px;margin-top:24px}
-
-/* 頁尾樣式 */
-footer{max-width:1160px;margin:28px auto 0;padding:22px 24px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-
-/* 手機版響應式設定 */
-@media(max-width:760px){
-  .shell{grid-template-columns:1fr}
-  .sidebar{position:static}
-  .nav-items{grid-template-columns:repeat(3,1fr)}
-  .nav-button{text-align:center;padding:12px 6px}
-  .sidebar-note{display:none}
-  .grid{grid-template-columns:1fr}
-  main{padding:28px 16px 16px}
-  .card{padding:22px 18px}
-  .top-inner{padding:18px 16px}
-  .top .eyebrow{display:none}
-}
-@media(prefers-reduced-motion:no-preference){
-  button,.tile-link,.entry-link{transition:background .15s,border-color .15s}
-}
+@media(max-width:650px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<a class="skip" href="#content">跳至主要內容</a>
-
-<!-- 【頂部標題列】 -->
-<header class="top">
-  <div class="top-inner">
-    <div class="brand">災防資料庫</div>
-    <div class="eyebrow" lang="en">Disaster Preparedness Database</div>
-  </div>
-</header>
-
+<header><strong>災防資料庫</strong></header>
 <main>
-  <div class="intro">
-    <div class="eyebrow">監測資訊・演習規劃・知識整理</div>
-    <h1>讓資訊成為應變的準備。</h1>
-    <p>彙整降雨警戒資訊與 HSEEP 演習規劃資料，提供日常查閱、情境設計與防災工作參考。</p>
-  </div>
+  <h1>讓資訊成為應變的準備。</h1>
+  <p>彙整降雨監測與演習規劃資料，提供日常查閱與防災工作參考。</p>
 
-  <div class="shell">
-    <!-- 【左側導覽選單區】 -->
-    <aside class="sidebar">
-      <nav aria-label="資料庫選單">
-        <details open>
-          <summary>資料分類</summary>
-          <div class="nav-items">
-            <button type="button" class="nav-button active" data-view="rain" aria-controls="rain" aria-current="page">降雨警戒</button>
-            <button type="button" class="nav-button" data-view="hseep" aria-controls="hseep">HSEEP 演習</button>
-            <button type="button" class="nav-button" data-view="contact" aria-controls="contact">聯絡資訊</button>
-          </div>
-        </details>
-      </nav>
-      <p class="sidebar-note">
-        資料供線上檢視與工作參考。<br>
-        各項內容將依建置進度更新。
-      </p>
-    </aside>
+  <div class="grid">
+    <a class="card" href="./model/rainAlert.html">
+      <h2>降雨警戒</h2>
+      <p>查看基隆市一小時與三小時雨量監測圖。</p>
+      <span class="tag">開啟雨量監測 →</span>
+    </a>
 
-    <div id="content" tabindex="-1">
-      <!-- 【分頁 1：降雨警戒內容（直接內嵌圖片）】 -->
-      <section id="rain" class="card view" aria-labelledby="rain-title">
-        <div class="section-head">
-          <h2 id="rain-title">降雨警戒</h2>
-          <span class="badge ready">即時圖資已顯示</span>
-        </div>
-
-        <p class="lead">
-          以下直接顯示基隆市一小時與三小時雨量監測圖，無需另外點擊。
-        </p>
-
-        <!-- 【直接嵌入圖片的區域】 -->
-        <div class="image-container">
-          <!-- 請將 src="您的圖片路徑.jpg" 換成您實際的圖片檔案名稱或網址 -->
-          <img src="./model/your-rain-image.jpg" alt="基隆市雨量監測與警戒圖">
-          <div class="image-caption">觀測時間與警戒線以圖內標示為準</div>
-        </div>
-
-        <div class="grid">
-          <article class="tile">
-            <h3>行政區警戒總覽</h3>
-            <p>規劃中：依測站位置與行政區整理降雨資訊，供區域查閱。</p>
-          </article>
-        </div>
-
-        <!-- 工作通報門檻表格 -->
-        <div class="table-wrap">
-          <table>
-            <caption>本資料庫使用的工作通報門檻</caption>
-            <thead>
-              <tr>
-                <th scope="col">層級</th>
-                <th scope="col">雨量條件</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">通報</th>
-                <td>一小時累積雨量 ≥ 20 mm</td>
-              </tr>
-              <tr>
-                <th scope="row">加發通報</th>
-                <td>一小時累積雨量 ≥ 40 mm，或三小時累積雨量 ≥ 70 mm</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p class="notice">
-          以上為工作用門檻，非中央氣象署大雨、豪雨分級標準。
-          實際應變請依權責機關最新公告及作業規定辦理。
-        </p>
-      </section>
-
-      <!-- 【分頁 2：HSEEP 演習內容】 -->
-      <section id="hseep" class="card view" hidden aria-labelledby="hseep-title">
-        <div class="section-head">
-          <h2 id="hseep-title">HSEEP 演習</h2>
-          <span class="badge">模板準備中</span>
-        </div>
-        <p class="lead">
-          整理演習介紹、情境設定與主要事件清單（MSEL），作為桌上演習規劃與討論的參考。
-        </p>
-        <div class="grid">
-          <article class="tile">
-            <h3>演習介紹</h3>
-            <p>演習目的、參與對象、推演方式與預期成果。</p>
-          </article>
-          <article class="tile">
-            <h3>情境設定</h3>
-            <p>災害背景、時間軸、衝擊條件與應變限制。</p>
-          </article>
-        </div>
-      </section>
-
-      <!-- 【分頁 3：聯絡資訊內容】 -->
-      <section id="contact" class="card view" hidden aria-labelledby="contact-title">
-        <div class="section-head">
-          <h2 id="contact-title">聯絡資訊</h2>
-          <span class="badge">建置中</span>
-        </div>
-        <p class="lead">
-          如有資料內容、演習模板或網站使用上的建議，可透過後續公布的聯絡方式提出。
-        </p>
-      </section>
-    </div>
+    <section class="card" aria-labelledby="hseep-title">
+      <h2 id="hseep-title">HSEEP 演習</h2>
+      <p>演習介紹、情境設定與主要事件清單（MSEL）。</p>
+      <span class="tag">模板準備中</span>
+    </section>
   </div>
 </main>
-
-<footer>
-  <span>災防資料庫</span>
-  <span>降雨監測與演習規劃資料整理</span>
-</footer>
-
-<script>
-(() => {
-  const buttons = [...document.querySelectorAll('[data-view]')];
-  const views = [...document.querySelectorAll('.view')];
-
-  function showView(id) {
-    const selected = views.find(view => view.id === id) || views[0];
-    views.forEach(view => {
-      view.hidden = view !== selected;
-    });
-    buttons.forEach(button => {
-      const active = button.dataset.view === selected.id;
-      button.classList.toggle('active', active);
-      if (active) button.setAttribute('aria-current', 'page');
-      else button.removeAttribute('aria-current');
-    });
-  }
-
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      location.hash = button.dataset.view;
-    });
-  });
-
-  window.addEventListener('hashchange', () => {
-    showView(location.hash.slice(1));
-  });
-
-  showView(location.hash.slice(1));
-})();
-</script>
+<footer>資料供工作參考；非災情通報或緊急救援受理管道。</footer>
 </body>
 </html>
