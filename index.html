@@ -2,49 +2,424 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<title>災防資料庫</title>
+<title>災防資料庫 | Disaster Preparedness Database</title>
+
 <style>
-:root{font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#20313d;background:#f2f5f7}
+:root{
+  --bg:#f2f5f7;
+  --ink:#20313d;
+  --muted:#607480;
+  --line:#dce5e9;
+  --teal:#116b70;
+  --navy:#153945;
+  font-family:"Segoe UI","Microsoft JhengHei",system-ui,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
 *{box-sizing:border-box}
 body{margin:0}
-header{background:#153945;color:white;padding:22px}
-main,footer{max-width:1000px;margin:auto;padding:28px 20px}
-h1{font-size:clamp(1.8rem,5vw,2.6rem)}
-p{line-height:1.8;color:#607480}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.card{display:block;padding:26px;border:1px solid #dce5e9;border-radius:14px;background:white;text-decoration:none;color:inherit}
-a.card:hover{border-color:#116b70;background:#f3fafa}
-h2{margin:0 0 12px;font-size:1.3rem}
-.card p{margin:0 0 18px}
-.tag{font-size:.85rem;color:#116b70;font-weight:700}
-footer{font-size:.8rem;color:#607480}
+a{color:var(--teal)}
+button{font:inherit}
+a,button,summary{touch-action:manipulation}
 :focus-visible{outline:3px solid #d28a26;outline-offset:4px}
-@media(max-width:650px){.grid{grid-template-columns:1fr}}
+[hidden]{display:none!important}
+
+.skip{
+  position:absolute;
+  left:12px;
+  top:-70px;
+  background:white;
+  padding:12px;
+  z-index:10;
+}
+.skip:focus{top:12px}
+
+.top{background:var(--navy);color:white}
+.top-inner{
+  max-width:1160px;
+  margin:auto;
+  padding:20px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+.brand{font-size:1.15rem;font-weight:800;letter-spacing:.1em}
+.eyebrow{font-size:.73rem;letter-spacing:.14em;text-transform:uppercase}
+.top .eyebrow{color:#b7d5d8}
+
+main{max-width:1160px;margin:auto;padding:42px 24px 24px}
+.intro{margin-bottom:30px;max-width:760px}
+.intro .eyebrow{color:var(--teal);font-weight:800}
+h1{font-size:clamp(2rem,5vw,3.2rem);margin:10px 0 14px;line-height:1.2}
+p{line-height:1.85}
+.intro p,.muted{color:var(--muted)}
+
+.shell{
+  display:grid;
+  grid-template-columns:240px minmax(0,1fr);
+  gap:24px;
+  align-items:start;
+}
+.sidebar,.card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+.sidebar{padding:16px;position:sticky;top:20px}
+.sidebar summary{font-weight:800;padding:8px;cursor:pointer}
+.nav-items{display:grid;gap:6px;margin-top:10px}
+.nav-button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  text-align:left;
+  padding:13px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+}
+.nav-button:hover{background:#edf5f5}
+.nav-button.active{background:#e5f1f0;color:#135f63}
+.sidebar-note{
+  border-top:1px solid var(--line);
+  padding:14px 8px 0;
+  margin:18px 0 0;
+  font-size:.8rem;
+  color:var(--muted);
+  line-height:1.8;
+}
+
+#content{min-width:0}
+.card{padding:28px}
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+h2{margin:0;font-size:1.5rem}
+h3{font-size:1rem;margin:0 0 8px}
+.badge{
+  background:#eef2f4;
+  color:#596c77;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:.76rem;
+  font-weight:700;
+}
+.lead{color:var(--muted);margin:14px 0 22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tile{border:1px solid var(--line);padding:20px;border-radius:10px}
+.tile p{font-size:.9rem;margin:0;color:var(--muted)}
+.empty{
+  background:#f6f9fa;
+  border:1px dashed #beced5;
+  border-radius:10px;
+  padding:28px 22px;
+  margin:22px 0;
+}
+.empty strong{display:block;margin-bottom:8px}
+.empty p{margin:0;color:var(--muted);font-size:.9rem}
+
+/* 右側載入獨立的雨量警戒頁面 */
+.rain-card{padding:0;overflow:hidden}
+.rain-frame{
+  display:block;
+  width:100%;
+  height:1400px;
+  border:0;
+  background:white;
+}
+
+footer{
+  max-width:1160px;
+  margin:28px auto 0;
+  padding:22px 24px;
+  border-top:1px solid var(--line);
+  font-size:.78rem;
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+@media(max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:static}
+  .nav-items{grid-template-columns:repeat(3,1fr)}
+  .nav-button{text-align:center;padding:12px 6px}
+  .sidebar-note{display:none}
+  .grid{grid-template-columns:1fr}
+  main{padding:28px 16px 16px}
+  .card{padding:22px 18px}
+  .rain-card{padding:0}
+  .top-inner{padding:18px 16px}
+  .top .eyebrow{display:none}
+}
+@media(prefers-reduced-motion:no-preference){
+  button{transition:background .15s}
+}
 </style>
 </head>
+
 <body>
-<header><strong>災防資料庫</strong></header>
+<a class="skip" href="#content">跳至主要內容</a>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">災防資料庫</div>
+    <div class="eyebrow" lang="en">
+      Disaster Preparedness Database
+    </div>
+  </div>
+</header>
+
 <main>
-  <h1>讓資訊成為應變的準備。</h1>
-  <p>彙整降雨監測與演習規劃資料，提供日常查閱與防災工作參考。</p>
+  <div class="intro">
+    <div class="eyebrow">監測資訊・演習規劃・知識整理</div>
+    <h1>讓資訊成為應變的準備。</h1>
+    <p>
+      彙整降雨警戒資訊與 HSEEP 演習規劃資料，
+      提供日常查閱、情境設計與防災工作參考。
+    </p>
+  </div>
 
-  <div class="grid">
-    <a class="card" href="./model/rainAlert.html">
-      <h2>降雨警戒</h2>
-      <p>查看基隆市一小時與三小時雨量監測圖。</p>
-      <span class="tag">開啟雨量監測 →</span>
-    </a>
+  <div class="shell">
+    <aside class="sidebar">
+      <nav aria-label="資料庫選單">
+        <details open>
+          <summary>資料分類</summary>
+          <div class="nav-items">
+            <button
+              type="button"
+              class="nav-button active"
+              data-view="rain"
+              aria-controls="rain"
+              aria-current="page">
+              降雨警戒
+            </button>
 
-    <section class="card" aria-labelledby="hseep-title">
-      <h2 id="hseep-title">HSEEP 演習</h2>
-      <p>演習介紹、情境設定與主要事件清單（MSEL）。</p>
-      <span class="tag">模板準備中</span>
-    </section>
+            <button
+              type="button"
+              class="nav-button"
+              data-view="hseep"
+              aria-controls="hseep">
+              HSEEP 演習
+            </button>
+
+            <button
+              type="button"
+              class="nav-button"
+              data-view="contact"
+              aria-controls="contact">
+              聯絡資訊
+            </button>
+          </div>
+        </details>
+      </nav>
+
+      <p class="sidebar-note">
+        資料供線上檢視與工作參考。<br>
+        各項內容將依建置進度更新。
+      </p>
+    </aside>
+
+    <div id="content" tabindex="-1">
+
+      <!-- 預設分頁：載入雨量警戒頁 -->
+      <section
+        id="rain"
+        class="card rain-card view"
+        aria-label="降雨警戒">
+        <iframe
+          id="rain-frame"
+          class="rain-frame"
+          src="./model/rainAlert.html"
+          title="基隆市降雨警戒"
+          referrerpolicy="no-referrer">
+        </iframe>
+      </section>
+
+      <!-- HSEEP 分頁 -->
+      <section
+        id="hseep"
+        class="card view"
+        hidden
+        aria-labelledby="hseep-title">
+
+        <div class="section-head">
+          <h2 id="hseep-title">HSEEP 演習</h2>
+          <span class="badge">模板準備中</span>
+        </div>
+
+        <p class="lead">
+          整理演習介紹、情境設定與主要事件清單（MSEL），
+          作為桌上演習規劃與討論的參考。
+        </p>
+
+        <div class="grid">
+          <article class="tile">
+            <h3>演習介紹</h3>
+            <p>演習目的、參與對象、推演方式與預期成果。</p>
+          </article>
+
+          <article class="tile">
+            <h3>情境設定</h3>
+            <p>災害背景、時間軸、衝擊條件與應變限制。</p>
+          </article>
+
+          <article class="tile">
+            <h3>MSEL 主要事件清單</h3>
+            <p>事件時間、情境注入、參與單位與預期應變作為。</p>
+          </article>
+
+          <article class="tile">
+            <h3>檢討與改善</h3>
+            <p>整理演習觀察、待改善事項與後續追蹤方向。</p>
+          </article>
+        </div>
+
+        <div class="empty">
+          <strong>待提供演習模板</strong>
+          <p>
+            模板與案例完成整理後，將於本頁提供檢視。
+            目前尚未提供下載檔案。
+          </p>
+        </div>
+      </section>
+
+      <!-- 聯絡資訊分頁 -->
+      <section
+        id="contact"
+        class="card view"
+        hidden
+        aria-labelledby="contact-title">
+
+        <div class="section-head">
+          <h2 id="contact-title">聯絡資訊</h2>
+          <span class="badge">建置中</span>
+        </div>
+
+        <p class="lead">
+          如有資料內容、演習模板或網站使用上的建議，
+          可透過後續公布的聯絡方式提出。
+        </p>
+
+        <div class="empty">
+          <strong>聯絡信箱待公布</strong>
+          <p>確認對外聯絡信箱後，將於此處提供電子郵件連結。</p>
+        </div>
+
+        <h3>關於資料庫</h3>
+        <p class="muted">
+          本網站持續整理防災監測與演習規劃相關資料。
+          網站供資訊參考，非災情通報或緊急救援受理管道。
+        </p>
+      </section>
+
+    </div>
   </div>
 </main>
-<footer>資料供工作參考；非災情通報或緊急救援受理管道。</footer>
+
+<footer>
+  <span>災防資料庫</span>
+  <span>降雨監測與演習規劃資料整理</span>
+</footer>
+
+<script>
+(() => {
+  const buttons = [...document.querySelectorAll('[data-view]')];
+  const views = [...document.querySelectorAll('.view')];
+  const frame = document.getElementById('rain-frame');
+  let frameObserver;
+
+  // 同來源子頁面載入後，自動配合內容高度。
+  // 若無法讀取子頁面，保留 CSS 預設高度。
+  function resizeFrame() {
+    if (document.getElementById('rain').hidden) return;
+
+    try {
+      const doc = frame.contentDocument;
+      if (!doc || !doc.body) return;
+
+      const body = doc.body;
+      const style = frame.contentWindow.getComputedStyle(body);
+      const height = Math.ceil(
+        body.getBoundingClientRect().height +
+        (parseFloat(style.marginTop) || 0) +
+        (parseFloat(style.marginBottom) || 0)
+      );
+
+      const nextHeight = Math.max(height + 2, 600);
+      if (Math.abs(frame.getBoundingClientRect().height - nextHeight) > 2) {
+        frame.style.height = nextHeight + 'px';
+      }
+    } catch {
+      // 子頁面不可讀取時，仍可使用 iframe 內的捲動功能。
+    }
+  }
+
+  frame.addEventListener('load', () => {
+    if (frameObserver) frameObserver.disconnect();
+
+    try {
+      const body = frame.contentDocument?.body;
+      if (body && 'ResizeObserver' in window) {
+        frameObserver = new ResizeObserver(resizeFrame);
+        frameObserver.observe(body);
+      }
+    } catch {
+      // 保留預設高度。
+    }
+
+    resizeFrame();
+  });
+
+  function showView(id) {
+    const selected = views.find(view => view.id === id) || views[0];
+
+    views.forEach(view => {
+      view.hidden = view !== selected;
+    });
+
+    buttons.forEach(button => {
+      const active = button.dataset.view === selected.id;
+      button.classList.toggle('active', active);
+
+      if (active) {
+        button.setAttribute('aria-current', 'page');
+      } else {
+        button.removeAttribute('aria-current');
+      }
+    });
+
+    if (selected.id === 'rain') {
+      requestAnimationFrame(resizeFrame);
+    }
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      location.hash = button.dataset.view;
+      showView(button.dataset.view);
+    });
+  });
+
+  window.addEventListener('hashchange', () => {
+    showView(location.hash.slice(1));
+  });
+
+  window.addEventListener('resize', resizeFrame);
+
+  // 沒有指定分頁時，預設顯示降雨警戒。
+  showView(location.hash.slice(1) || 'rain');
+})();
+</script>
 </body>
 </html>
